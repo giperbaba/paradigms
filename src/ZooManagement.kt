@@ -13,7 +13,8 @@ class ZooManagement(private val employees: List<Employee>) {
         return if (employeesWithPosition.isNotEmpty()) {
             val randomIndex = employeesWithPosition.indices.random()
             employeesWithPosition[randomIndex]
-        } else {
+        }
+        else {
             null
         }
     }

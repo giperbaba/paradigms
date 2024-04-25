@@ -17,7 +17,7 @@ class Employee(name: String = "", gender: String = "", var position: String = ""
     }
 
     // Метод для редактирования должности сотрудника
-    fun editPosition(name: String, newPosition: String, employeeToEdit: Employee) {
+    fun editPosition(name: String, newPosition: String, employeeToEdit: Employee){
         employeeToEdit.position = newPosition.replace("monkey", "Monkey Feeder").replace("parrot", "Parrot Feeder").replace("wolf", "Wolf Feeder")
         println("Должность сотрудника $name изменена на ${employeeToEdit.position}")
     }

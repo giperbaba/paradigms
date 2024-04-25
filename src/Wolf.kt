@@ -1,4 +1,5 @@
 class Wolf : Animal("Wolf", 0) {
+
     private companion object {
         const val WOLFVOICE = "Wolf: Уууууууу"
     }

@@ -138,7 +138,8 @@ class Zoo (private val animals: MutableList<Animal> = mutableListOf<Animal>(),
         val visitorToEdit = visitors.find { it.name == oldName }
         if (visitorToEdit != null) {
             visitorToEdit.editName(oldName, newName, visitorToEdit)
-        } else {
+        }
+        else {
             println("Посетитель с именем $oldName не найден в зоопарке.")
         }
     }
