@@ -122,7 +122,6 @@ class Zoo (private val animals: MutableList<Animal> = mutableListOf<Animal>(),
         }
     }
 
-    // Метод для редактирования должности сотрудника
     fun editEmployeePosition(name: String, newPosition: String) {
         val employeeToEdit = employees.find { it.name == name }
         if (employeeToEdit != null) {
@@ -133,7 +132,6 @@ class Zoo (private val animals: MutableList<Animal> = mutableListOf<Animal>(),
         }
     }
 
-    // Метод для редактирования имени посетителя
     fun editVisitorName(oldName: String, newName: String) {
         val visitorToEdit = visitors.find { it.name == oldName }
         if (visitorToEdit != null) {

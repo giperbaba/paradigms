@@ -1,4 +1,5 @@
 class ZooManagement(private val employees: List<Employee>) {
+
     fun getResponsibleEmployee(animal: Animal): Employee? {
         return when (animal) {
             is Parrot -> getRandomEmployeeByPosition("Parrot Feeder")
