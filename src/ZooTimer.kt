@@ -1,7 +1,7 @@
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
-class ZooTimer(private val zoo: Zoo) {
-    private val timer = Timer()
+class ZooTimer(private val zoo: Zoo, private val timer: Timer = Timer()) {
 
     fun start() {
         timer.scheduleAtFixedRate(object : TimerTask() {

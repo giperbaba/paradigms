@@ -10,6 +10,9 @@ fun main() {
     println("'del visitor 'name'' - удалить посетителя")
     println("'del employee 'name' - удалить сотрудника")
     println("'del animal 'animalType'' - удалить животное")
+    println("voice parrot")
+    println("voice wolf")
+    println("voice monkey")
     println("'check status zoo' - статус зоопарка")
     println("'check status visitors' - статус посетителей")
     println("'check status employee' - статус сотрудников")
@@ -98,15 +101,15 @@ fun main() {
             }
             "voice" -> {
                 when (tokens[1]) {
-                    "parrot" -> zoo.makeAnimalSound(Parrot())
-                    "wolf" -> zoo.makeAnimalSound(Wolf())
-                    "monkey" -> zoo.makeAnimalSound(Monkey())
+                    "parrot" -> Parrot().makeSound()
+                    "wolf" -> Wolf().makeSound()
+                    "monkey" -> Monkey().makeSound()
                     else -> println("Неизвестный тип животного для воспроизведения звука: ${tokens[1]}")
                 }
             }
             "check" -> {
                 when (tokens[2]) {
-                    "zoo" -> zoo.checkStatus()
+                    "zoo" -> zoo.checkStatusZoo()
                     "visitors" -> zoo.checkStatusVisitors()
                     "employee" -> zoo.checkStatusEmployees()
                     "animals" -> zoo.checkStatusAnimals()
@@ -157,3 +160,4 @@ fun main() {
         }
     }
 }
+
