@@ -3,7 +3,7 @@ import java.util.*
 class Zoo (private val animals: MutableList<Animal> = mutableListOf<Animal>(),
            private val visitors: MutableList<Visitor> = mutableListOf<Visitor>(),
            private val employees: MutableList<Employee> = mutableListOf<Employee>(),
-           private val management: ZooManagement = ZooManagement(employees)){
+           private val management: ZooManagement = ZooManagement(employees)) {
 
     // Методы для добавления людей и животных
     fun addVisitor(visitor: Visitor) {

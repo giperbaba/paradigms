@@ -20,6 +20,8 @@ fun main() {
     println("'edit name employee 'oldName' 'newName'' - редактировать имя сотрудника")
     println("'edit position employee 'name' 'newPosition'' - редактировать должность сотрудника")
     println("'edit name visitor 'oldName' 'newName'' - редактировать имя посетителя")
+    println("Введите 'pause', чтобы поставить на паузу программу\n")
+    println("Введите 'resume', чтобы возобновить программу\n")
     println("Введите 'stop', чтобы завершить программу\n")
 
     val zooTimer = ZooTimer(zoo)
@@ -151,6 +153,12 @@ fun main() {
                     }
                     else -> println("Неизвестная команда редактирования: ${tokens[1]}")
                 }
+            }
+            "pause" -> {
+                zooTimer.pause()
+            }
+            "resume" -> {
+                zooTimer.resume()
             }
             "stop" -> {
                 zooTimer.stop()
