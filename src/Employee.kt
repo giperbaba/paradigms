@@ -1,21 +1,25 @@
-class Employee(name: String = "", gender: String = "", var position: String = "") : People(name, gender) {
+class Employee(name: String = "", gender: String = "", private var position: String = "") : People(name, gender) {
 
-    fun getStatus(employee: Employee) {
-        println("Имя: ${employee.name}, Пол: ${employee.gender}, Должность: ${employee.position}")
+    private companion object {
+        const val FOODAMOUNT = 100
     }
 
-    fun editName(oldName: String, newName: String, employeeToEdit: Employee) {
+    fun getStatus(employee: Employee): String {
+        return "Имя: ${employee.name}, Пол: ${employee.gender}, Должность: ${employee.position}"
+    }
+
+    fun editName(oldName: String, newName: String, employeeToEdit: Employee): String {
         employeeToEdit.name = newName
-        println("Имя сотрудника изменено с $oldName на $newName")
+        return "Имя сотрудника изменено с $oldName на $newName"
     }
 
-    fun editPosition(name: String, newPosition: String, employeeToEdit: Employee){
-        employeeToEdit.position = newPosition.replace("monkey", "Monkey Feeder").replace("parrot", "Parrot Feeder").replace("wolf", "Wolf Feeder")
-        println("Должность сотрудника $name изменена на ${employeeToEdit.position}")
+    fun editPosition(name: String, newPosition: String, employeeToEdit: Employee): String {
+        employeeToEdit.position = newPosition
+        return "Должность сотрудника $name изменена на ${employeeToEdit.position}"
     }
 
-    fun feedAnimals(animal: Animal) {
-        animal.hungerLevel = 0
-        println("${this.name} кормит ${animal.type}")
+    fun fillStockFood(enclosure: Enclosure): String {
+        enclosure.foodStock += FOODAMOUNT
+        return "${this.name} пополняет запас еды в вольере."
     }
 }

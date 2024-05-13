@@ -1,0 +1,1 @@
+class SpecialFood(val name: String = "shit", val price: Int = 10)

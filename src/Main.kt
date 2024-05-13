@@ -1,34 +1,40 @@
 import java.util.*
 
 fun main() {
-    val zoo = Zoo()
+    val zoo = ZooImpl()
 
     println("\nДля выполнения операций введите команды:")
+
     println("'add visitor 'name gender'' - добавить посетителя")
     println("'add animal 'type animal'' - добавить животное")
     println("'add employee 'name gender position'' - добавить сотрудника")
+
     println("'del visitor 'name'' - удалить посетителя")
     println("'del employee 'name' - удалить сотрудника")
     println("'del animal 'animalType'' - удалить животное")
+
     println("voice parrot")
     println("voice wolf")
     println("voice monkey")
+
     println("'check status zoo' - статус зоопарка")
     println("'check status visitors' - статус посетителей")
     println("'check status employee' - статус сотрудников")
     println("'check status animals' - статус животных")
+
     println("'edit name employee 'oldName' 'newName'' - редактировать имя сотрудника")
     println("'edit position employee 'name' 'newPosition'' - редактировать должность сотрудника")
     println("'edit name visitor 'oldName' 'newName'' - редактировать имя посетителя")
+
     println("Введите 'pause', чтобы поставить на паузу программу\n")
     println("Введите 'resume', чтобы возобновить программу\n")
     println("Введите 'stop', чтобы завершить программу\n")
 
     val zooTimer = ZooTimer(zoo)
 
-    val parrotFeeder = Employee("John", "Male", "Parrot Feeder")
-    val wolfFeeder = Employee("Alice", "Female", "Wolf Feeder")
-    val monkeyFeeder = Employee("Bob", "Male", "Monkey Feeder")
+    val parrotFeeder = Employee("John", "Male", "Vet")
+    val wolfFeeder = Employee("Alice", "Female", "Security")
+    val monkeyFeeder = Employee("Bob", "Male", "Cleaner")
 
     zoo.addEmployee(parrotFeeder)
     zoo.addEmployee(wolfFeeder)
@@ -38,11 +44,12 @@ fun main() {
     zoo.addAnimal("wolf")
     zoo.addAnimal("monkey")
 
+
     zooTimer.start()
     val scanner = Scanner(System.`in`)
 
     while (true) {
-        val input = scanner.nextLine()
+        val input = scanner.nextLine().lowercase(Locale.getDefault())
         val tokens = input.split(" ")
         when (tokens[0]) {
             "add" -> {
