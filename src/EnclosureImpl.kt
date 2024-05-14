@@ -7,7 +7,7 @@ class EnclosureImpl() : Enclosure {
         const val LIMITWOLF = 5
         const val LIMITMONKEY = 7
         const val LIMITPARROT = 10
-        const val INITIALFOOD = 100
+        const val INITIALFOOD = 10
     }
 
     override val animals: MutableList<Animal> = mutableListOf()
@@ -15,28 +15,27 @@ class EnclosureImpl() : Enclosure {
     override var limitSize: Int = -1
 
 
-    private val openablePart : OpenablePart = OpenablePartImpl()
+    val openablePart : OpenablePart = OpenablePartImpl()
     private val closeablePart: CloseablePart = CloseablePartImpl()
+
+    override fun getOpenablePart(): List<Animal> {
+        return openablePart.animalsOpenPart
+    }
 
     override fun isFull(): Boolean {
         return animals.size == limitSize
     }
 
-    override fun add(species: String): String {
-        val animal: Animal = when (species.lowercase(Locale.getDefault())) {
-            "parrot" -> {
-                limitSize = LIMITPARROT
-                Parrot()
-            }
-            "wolf" -> {
-                limitSize = LIMITWOLF
-                Wolf()
-            }
-            "monkey" -> {
-                limitSize = LIMITMONKEY
-                Monkey()
-            }
-            else -> throw IllegalArgumentException("Неизвестный тип животного: $species")
+    override fun append(animal: Animal): String {
+        limitSize = when (animal.type.lowercase(Locale.getDefault())) {
+            "parrot" -> LIMITPARROT
+            "wolf" -> LIMITWOLF
+            "monkey" -> LIMITMONKEY
+            else -> throw IllegalArgumentException("Неизвестный тип животного: ${animal.type}")
+        }
+
+        if (animals.size >= limitSize) {
+            return "Вольер полон, невозможно добавить ${animal.type}."
         }
 
         animals.add(animal)
@@ -46,12 +45,11 @@ class EnclosureImpl() : Enclosure {
         val addToOpenPart = Random.nextBoolean()
         if (addToOpenPart) {
             openablePart.animalsOpenPart.add(animal)
-        }
-        else {
+        } else {
             closeablePart.animalsClosePart.add(animal)
         }
 
-        return "Добавлено животное ${animal.type}. Размер вольера: $animals.size"
+        return "Добавлено животное ${animal.type}. Размер вольера: ${animals.size}"
     }
 
     override fun remove(species: String): String {

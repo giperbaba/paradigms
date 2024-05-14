@@ -1,9 +1,11 @@
+import java.util.*
 import kotlin.random.Random
 
-class ZooImpl(private val animals: MutableList<Animal> = mutableListOf(),
-              private val visitors: MutableList<Visitor> = mutableListOf(),
-              private val employees: MutableList<Employee> = mutableListOf(),
-              private val enclosures: MutableList<Enclosure> = mutableListOf()) : Zoo {
+class ZooImpl(
+    private val visitors: MutableList<Visitor> = mutableListOf(),
+    private val employees: MutableList<Employee> = mutableListOf(),
+    private val enclosures: MutableList<Enclosure> = mutableListOf()
+) : Zoo {
 
     init {
         repeat(15) {
@@ -12,41 +14,54 @@ class ZooImpl(private val animals: MutableList<Animal> = mutableListOf(),
         }
     }
 
-    override fun addVisitor(visitor: Visitor) {
+    override fun createAnimal(species: String): Animal {
+        return when (species.lowercase(Locale.getDefault())) {
+            "wolf" -> Wolf()
+            "parrot" -> Parrot()
+            "monkey" -> Monkey()
+            else -> throw IllegalArgumentException("Неподдерживаемый вид животного: $species")
+        }
+    }
+
+    override fun addVisitor(visitor: Visitor): String {
         visitors.add(visitor)
-        println("add visitor ${visitor.name} done")
+        return "add visitor ${visitor.name} done"
     }
 
-    override fun addEmployee(employee: Employee) {
+    override fun addEmployee(employee: Employee): String {
         employees.add(employee)
-        println("add employee ${employee.name} done")
+        return "add employee ${employee.name} done"
     }
 
-    override fun addEnclosure() {
+    override fun addEnclosure(): String {
         val newEnclosure = EnclosureImpl()
         enclosures.add(newEnclosure)
-        println("Добавлен новый вольер: ${newEnclosure.javaClass.simpleName}")
+        return "Добавлен новый вольер: ${newEnclosure.javaClass.simpleName}"
     }
 
-    override fun addAnimal(animalType: String) {
+    override fun addAnimal(animalType: String): String {
+        val animal = createAnimal(animalType)
         val matchingEnclosure = enclosures.firstOrNull {
-            it.animals.isNotEmpty() && it.animals[0].type.equals(animalType, ignoreCase = true) && it.animals.size < it.limitSize
+            it.animals.isNotEmpty() && it.animals[0].type.equals(
+                animalType,
+                ignoreCase = true
+            ) && it.animals.size < it.limitSize
         }
 
         if (matchingEnclosure != null) {
-            matchingEnclosure.add(animalType)
-            println("add animal $animalType done")
-        }
-
-        else {
+            matchingEnclosure.append(animal)
+            return "add animal $animalType done"
+        } else {
             val newEnclosure = EnclosureImpl()
-            newEnclosure.add(animalType)
-            println("add animal $animalType done")
+            newEnclosure.append(animal)
+            enclosures.add(newEnclosure) // Add the new enclosure to the list
+            return "add animal $animalType done"
         }
     }
 
     override fun checkStatusZoo(): String {
-        return "В зоопарке находится ${visitors.size} посетителей, ${employees.size} сотрудников и ${animals.size} животных."
+        val totalAnimals = enclosures.sumOf { it.animals.size }
+        return "В зоопарке находится ${visitors.size} посетителей, ${employees.size} сотрудников и $totalAnimals животных."
     }
 
     override fun checkStatusVisitors(): String {
@@ -71,8 +86,10 @@ class ZooImpl(private val animals: MutableList<Animal> = mutableListOf(),
 
     override fun checkStatusAnimals(): String {
         val status = StringBuilder("Статус животных в зоопарке:\n")
-        for (animal in animals) {
-            status.append(animal.getStatus(animal)).append("\n")
+        for (enclosure in enclosures) {
+            for (animal in enclosure.animals) {
+                status.append(animal.getStatus(animal)).append("\n")
+            }
         }
         return status.toString()
     }
@@ -85,115 +102,129 @@ class ZooImpl(private val animals: MutableList<Animal> = mutableListOf(),
         return status.toString()
     }
 
-    override fun deleteVisitor(name: String) {
+    override fun deleteVisitor(name: String): String {
         val visitorToRemove = visitors.find { it.name == name }
-        if (visitorToRemove != null) {
+        return if (visitorToRemove != null) {
             visitors.remove(visitorToRemove)
-            println("delete visitor ${visitorToRemove.name} done")
+            "delete visitor ${visitorToRemove.name} done"
         } else {
-            println("Посетитель с именем $name не найден в зоопарке.")
+            "Посетитель с именем $name не найден в зоопарке."
         }
     }
 
-    override fun deleteEmployee(name: String) {
+    override fun deleteEmployee(name: String): String {
         val employeeToRemove = employees.find { it.name == name }
-        if (employeeToRemove != null) {
+        return if (employeeToRemove != null) {
             employees.remove(employeeToRemove)
-            println("delete employee ${employeeToRemove.name} done")
+            "delete employee ${employeeToRemove.name} done"
         } else {
-            println("Сотрудник с именем $name не найден в зоопарке.")
+            "Сотрудник с именем $name не найден в зоопарке."
         }
     }
 
-    override fun deleteAnimal(animalType: String) {
-        // Находим животное для удаления
-        val animalToRemove = animals.find { it.type.equals(animalType, ignoreCase = true) }
-        if (animalToRemove != null) {
-            // Удаляем животное из общего списка животных в зоопарке
-            animals.remove(animalToRemove)
-            println("delete animal ${animalToRemove.type} done")
-
-            // Удаляем животное из всех вольеров
-            for (enclosure in enclosures) {
-                if (enclosure.animals.contains(animalToRemove)) {
-                    enclosure.remove(animalType)
-                    println("delete animal ${animalToRemove.type} done from enclosure ${enclosure.javaClass.simpleName}")
-                }
+    override fun deleteAnimal(animalType: String): String {
+        var result = StringBuilder()
+        for (enclosure in enclosures) {
+            val animalToRemove = enclosure.animals.find { it.type.equals(animalType, ignoreCase = true) }
+            if (animalToRemove != null) {
+                enclosure.animals.remove(animalToRemove)
+                result.append("delete animal ${animalToRemove.type} done from enclosure ${enclosure.javaClass.simpleName}\n")
             }
+        }
+        return if (result.isEmpty()) {
+            "Животное типа $animalType не найдено в зоопарке."
         } else {
-            println("Животное типа $animalType не найдено в зоопарке.")
+            result.toString().trim()
         }
     }
 
-    override fun editEmployeeName(oldName: String, newName: String) {
+    override fun editEmployeeName(oldName: String, newName: String): String {
         val employeeToEdit = employees.find { it.name == oldName }
-        if (employeeToEdit != null) {
+        return if (employeeToEdit != null) {
             employeeToEdit.editName(oldName, newName, employeeToEdit)
+            "Сотрудник $oldName изменил имя на $newName."
         } else {
-            println("Сотрудник с именем $oldName не найден в зоопарке.")
+            "Сотрудник с именем $oldName не найден в зоопарке."
         }
     }
 
-    override fun editEmployeePosition(name: String, newPosition: String) {
+    override fun editEmployeePosition(name: String, newPosition: String): String {
         val employeeToEdit = employees.find { it.name == name }
-        if (employeeToEdit != null) {
+        return if (employeeToEdit != null) {
             employeeToEdit.editPosition(name, newPosition, employeeToEdit)
+            "Сотрудник $name теперь имеет должность $newPosition."
         } else {
-            println("Сотрудник с именем $name не найден в зоопарке.")
+            "Сотрудник с именем $name не найден в зоопарке."
         }
     }
 
-    override fun editVisitorName(oldName: String, newName: String) {
+    override fun editVisitorName(oldName: String, newName: String): String {
         val visitorToEdit = visitors.find { it.name == oldName }
-        if (visitorToEdit != null) {
+        return if (visitorToEdit != null) {
             visitorToEdit.editName(oldName, newName, visitorToEdit)
+            "Посетитель $oldName изменил имя на $newName."
         } else {
-            println("Посетитель с именем $oldName не найден в зоопарке.")
+            "Посетитель с именем $oldName не найден в зоопарке."
         }
     }
 
     override fun increaseHungerLevel() {
-        for (animal in animals) {
-            animal.updateHungerLevel(animal)
+        for (enclosure in enclosures) {
+            enclosure.animals.forEach { it.updateHungerLevel(it) }
         }
     }
 
-    override fun fillStockEnclosure() {
+    override fun fillStockEnclosure(): String {
+        val status = StringBuilder()
         for (enclosure in enclosures) {
             if (enclosure.foodStock == 0) {
                 val randomEmployee = employees.random()
                 val fillStockMessage = randomEmployee.fillStockFood(enclosure)
-                println(fillStockMessage)
             }
         }
+        return status.toString().trim()
     }
 
     override fun moveAnimals() {
-
+        val status = StringBuilder()
         for (enclosure in enclosures) {
             val animalsInEnclosure = enclosure.animals.toList()
-
-            // Перемещаем случайное количество животных из текущего вольера
-
             val numberOfAnimalsToMove = Random.nextInt(animalsInEnclosure.size)
             repeat(numberOfAnimalsToMove) {
-
                 val randomAnimal = animalsInEnclosure.random()
-
                 val moveResult = enclosure.moveAnimal(randomAnimal)
-
-                println(moveResult)
+                status.append(moveResult).append("\n")
             }
         }
+        println(status.toString().trim())
     }
 
     override fun feedAnimalsInEnclosures() {
+        val status = StringBuilder()
         for (enclosure in enclosures) {
             for (animal in enclosure.animals) {
                 if (animal.hungerLevel >= animal.getHungerLimit()) {
                     animal.eatFromEnclosure(enclosure)
+                    status.append("Animal ${animal.type} has been fed.\n")
                 }
             }
         }
+    }
+
+    override fun feedAnimalsByVisitor(visitorName: String, species: String): String {
+        val visitor = visitors.find { it.name == visitorName }
+        if (visitor == null) {
+            return "Посетитель с именем $visitorName не найден в зоопарке."
+        }
+
+        for (enclosure in enclosures) {
+            val animal = enclosure.getOpenablePart().find { it.type.equals(species, ignoreCase = true) }
+            if (animal != null) {
+                visitor.feedAnimal(animal)
+                return "${visitor.name} покормил(а) ${animal.type} в открытой части вольера."
+            }
+        }
+
+        return "Животное типа $species не найдено в открытой части вольера."
     }
 }

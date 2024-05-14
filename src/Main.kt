@@ -1,7 +1,7 @@
 import java.util.*
 
 fun main() {
-    val zoo = ZooImpl()
+    val zoo : Zoo = ZooImpl()
 
     println("\nДля выполнения операций введите команды:")
 
@@ -30,6 +30,11 @@ fun main() {
     println("Введите 'resume', чтобы возобновить программу\n")
     println("Введите 'stop', чтобы завершить программу\n")
 
+    println("'add enclosure' - добавить вольер") //TODO: вызывает addEnclosure()
+    println("feed 'name'") //TODO: вызывает feedAnimalsByVisitor
+    println ("buy food 'name'") //TODO: вызывает buySpecialFood
+    println ("check openable part for visitor") //TODO: вызывает checkStatusOpenablePart
+
     val zooTimer = ZooTimer(zoo)
 
     val parrotFeeder = Employee("John", "Male", "Vet")
@@ -39,11 +44,6 @@ fun main() {
     zoo.addEmployee(parrotFeeder)
     zoo.addEmployee(wolfFeeder)
     zoo.addEmployee(monkeyFeeder)
-
-    zoo.addAnimal("parrot")
-    zoo.addAnimal("wolf")
-    zoo.addAnimal("monkey")
-
 
     zooTimer.start()
     val scanner = Scanner(System.`in`)
@@ -56,14 +56,14 @@ fun main() {
                 when (tokens[1]) {
                     "visitor" -> {
                         if (tokens.size == 4) {
-                            zoo.addVisitor(Visitor(tokens[2], tokens[3]))
+                            println(zoo.addVisitor(Visitor(tokens[2], tokens[3])))
                         } else {
                             println("Некорректный формат добавления посетителя. Используйте 'add visitor 'name gender''")
                         }
                     }
                     "animal" -> {
                         if (tokens.size == 3) {
-                            zoo.addAnimal(tokens[2])
+                            println(zoo.addAnimal(tokens[2]))
                         } else {
                             println("Некорректный формат добавления животного. Используйте 'add animal 'type''")
                         }
@@ -74,7 +74,7 @@ fun main() {
                             val gender = tokens[3]
                             val position = tokens[4].replace("monkey", "Monkey Feeder").replace("parrot", "Parrot Feeder").replace("wolf", "Wolf Feeder")
                             val employee = Employee(name, gender, position)
-                            zoo.addEmployee(employee)
+                            println(zoo.addEmployee(employee))
                         } else {
                             println("Некорректный формат добавления сотрудника. Используйте 'add employee 'name gender position''")
                         }
@@ -86,21 +86,21 @@ fun main() {
                 when (tokens[1]) {
                     "visitor" -> {
                         if (tokens.size == 3) {
-                            zoo.deleteVisitor(tokens[2])
+                            println(zoo.deleteVisitor(tokens[2]))
                         } else {
                             println("Некорректный формат удаления посетителя. Используйте 'del visitor 'name''")
                         }
                     }
                     "employee" -> {
                         if (tokens.size == 3) {
-                            zoo.deleteEmployee(tokens[2])
+                            println(zoo.deleteEmployee(tokens[2]))
                         } else {
                             println("Некорректный формат удаления сотрудника. Используйте 'del employee 'name''")
                         }
                     }
                     "animal" -> {
                         if (tokens.size == 3) {
-                            zoo.deleteAnimal(tokens[2])
+                            println(zoo.deleteAnimal(tokens[2]))
                         } else {
                             println("Некорректный формат удаления животного. Используйте 'del animal 'animalType''")
                         }
@@ -118,10 +118,10 @@ fun main() {
             }
             "check" -> {
                 when (tokens[2]) {
-                    "zoo" -> zoo.checkStatusZoo()
-                    "visitors" -> zoo.checkStatusVisitors()
-                    "employee" -> zoo.checkStatusEmployees()
-                    "animals" -> zoo.checkStatusAnimals()
+                    "zoo" -> println(zoo.checkStatusZoo())
+                    "visitors" -> println(zoo.checkStatusVisitors())
+                    "employee" -> println(zoo.checkStatusEmployees())
+                    "animals" -> println(zoo.checkStatusAnimals())
                     else -> println("Неизвестный тип для проверки статуса: ${tokens[2]}")
                 }
             }
@@ -131,14 +131,14 @@ fun main() {
                         when (tokens[2]) {
                             "employee" -> {
                                 if (tokens.size == 5) {
-                                    zoo.editEmployeeName(tokens[3], tokens[4])
+                                    println(zoo.editEmployeeName(tokens[3], tokens[4]))
                                 } else {
                                     println("Некорректный формат редактирования имени сотрудника. Используйте 'edit name employee 'oldName' 'newName''")
                                 }
                             }
                             "visitor" -> {
                                 if (tokens.size == 5) {
-                                    zoo.editVisitorName(tokens[3], tokens[4])
+                                    println(zoo.editVisitorName(tokens[3], tokens[4]))
                                 } else {
                                     println("Некорректный формат редактирования имени посетителя. Используйте 'edit name visitor 'oldName' 'newName''")
                                 }
@@ -150,7 +150,7 @@ fun main() {
                         when (tokens[2]) {
                             "employee" -> {
                                 if (tokens.size == 5) {
-                                    zoo.editEmployeePosition(tokens[3], tokens[4])
+                                    println(zoo.editEmployeePosition(tokens[3], tokens[4]))
                                 } else {
                                     println("Некорректный формат редактирования должности сотрудника. Используйте 'edit position employee 'name' 'newPosition''")
                                 }

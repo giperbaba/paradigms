@@ -25,15 +25,15 @@ abstract class Animal(val type: String = "", var hungerLevel: Int = 0) {
 
     abstract fun makeSound()
 
-    fun eatFromEnclosure(enclosure: Enclosure) {
+    fun eatFromEnclosure(enclosure: Enclosure) : String {
         val foodToEat = hungerLevel
         return if (enclosure.foodStock >= foodToEat) {
             enclosure.foodStock -= foodToEat
             hungerLevel = 0
-            println("$type поел(а) из вольера")
+            "$type поел(а) из вольера"
         }
         else {
-            println("В вольере недостаточно еды для $type")
+            "В вольере недостаточно еды для $type"
         }
     }
 }

@@ -12,8 +12,10 @@ interface Enclosure {
     val limitSize: Int
     var foodStock: Int
 
-    fun add(species: String): String
+    fun append(animal: Animal): String
     fun remove(species: String): String
+
+    fun getOpenablePart(): List<Animal>
 
     fun getStatus() : String
     fun isFull(): Boolean

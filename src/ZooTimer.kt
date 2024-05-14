@@ -1,7 +1,7 @@
 import java.util.Timer
 import java.util.TimerTask
 
-class ZooTimer(private val zoo: ZooImpl, private val timer: Timer = Timer()) {
+class ZooTimer(private val zoo: Zoo, private val timer: Timer = Timer()) {
     private var isPaused: Boolean = false
 
     private val moveInterval: Long = 10

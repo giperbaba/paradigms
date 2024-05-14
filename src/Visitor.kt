@@ -26,7 +26,7 @@ class Visitor(name: String = "", gender: String = "", private var cash: Int = 10
 
     fun feedAnimal(animal: Animal) {
         if (animal.hungerLevel != 0) {
-            println("${animal.type}: не хочу нах" ) //TODO: переделать слова
+            println("${animal.type}: не хочу нах" )
         }
         else if (food.size == 0) {
             println ("Приобретите специальную еду")
