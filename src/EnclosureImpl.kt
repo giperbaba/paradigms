@@ -7,7 +7,7 @@ class EnclosureImpl() : Enclosure {
         const val LIMITWOLF = 5
         const val LIMITMONKEY = 7
         const val LIMITPARROT = 10
-        const val INITIALFOOD = 10
+        const val INITIALFOOD = 75
     }
 
     override val animals: MutableList<Animal> = mutableListOf()
@@ -62,22 +62,22 @@ class EnclosureImpl() : Enclosure {
         }
     }
 
-    override fun moveAnimal(animal: Animal): String {
-        // Проверяем, находится ли животное в открытой части зоопарка
+    override fun moveAnimal(animal: Animal, animalId: Int): String {
+        // Check if the animal is in the open part
         if (openablePart.animalsOpenPart.contains(animal)) {
             openablePart.animalsOpenPart.remove(animal)
             closeablePart.animalsClosePart.add(animal)
-            return "${animal.type} перемещен(а) в закрытую часть вольера"
+            return "${animal.type} id:$animalId перемещен(а) в закрытую часть вольера"
         }
 
-        // Проверяем, находится ли животное в закрытой части зоопарка
+        // Check if the animal is in the closed part
         if (closeablePart.animalsClosePart.contains(animal)) {
             closeablePart.animalsClosePart.remove(animal)
             openablePart.animalsOpenPart.add(animal)
-            return "${animal.type} перемещен(а) в открытую часть вольера"
+            return "${animal.type} id:$animalId перемещен(а) в открытую часть вольера"
         }
 
-        return "${animal.type} не найдено в вольере"
+        return "${animal.type} id:$animalId не найдено в вольере"
     }
 
 
@@ -87,6 +87,13 @@ class EnclosureImpl() : Enclosure {
         status.append("Запас еды: $foodStock\n")
         status.append("Животные:\n")
         animals.forEach { status.append("${it.type}\n") }
+        return status.toString()
+    }
+
+    override fun checkStatusOpenablePart(): String {
+        val status = StringBuilder()
+        status.append("Животные в открытой части:\n")
+        openablePart.animalsOpenPart.forEach { status.append("${it.type}\n") }
         return status.toString()
     }
 }

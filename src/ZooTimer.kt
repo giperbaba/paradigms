@@ -11,6 +11,10 @@ class ZooTimer(private val zoo: Zoo, private val timer: Timer = Timer()) {
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 if (!isPaused) {
+                    val randomVisitor = zoo.getRandomVisitor()
+                    val randomAnimal = zoo.getRandomAnimal()
+                    randomVisitor?.name?.let { zoo.feedAnimalsByVisitor(it, randomAnimal.type) }
+
                     zoo.increaseHungerLevel() // Увеличиваем уровень голода каждую секунду
                     zoo.fillStockEnclosure() // Проверяем запас еды
                     zoo.feedAnimalsInEnclosures() // Голодные животные кушают

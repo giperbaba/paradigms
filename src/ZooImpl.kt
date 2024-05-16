@@ -14,6 +14,11 @@ class ZooImpl(
         }
     }
 
+    override fun getEnclosureCount(): Int {
+        return enclosures.size
+    }
+
+
     override fun createAnimal(species: String): Animal {
         return when (species.lowercase(Locale.getDefault())) {
             "wolf" -> Wolf()
@@ -138,6 +143,16 @@ class ZooImpl(
         }
     }
 
+    override fun deleteEnclosure(index: Int): String {
+        return if (index in enclosures.indices) {
+            val enclosureToRemove = enclosures[index]
+            enclosures.removeAt(index)
+            "delete enclosure at index $index done, removed ${enclosureToRemove.animals.size} animals"
+        } else {
+            "Вольер с индексом $index не найден в зоопарке."
+        }
+    }
+
     override fun editEmployeeName(oldName: String, newName: String): String {
         val employeeToEdit = employees.find { it.name == oldName }
         return if (employeeToEdit != null) {
@@ -177,9 +192,10 @@ class ZooImpl(
     override fun fillStockEnclosure(): String {
         val status = StringBuilder()
         for (enclosure in enclosures) {
-            if (enclosure.foodStock == 0) {
+            if (enclosure.foodStock <= 0) {
                 val randomEmployee = employees.random()
                 val fillStockMessage = randomEmployee.fillStockFood(enclosure)
+                status.append(fillStockMessage)
             }
         }
         return status.toString().trim()
@@ -191,8 +207,11 @@ class ZooImpl(
             val animalsInEnclosure = enclosure.animals.toList()
             val numberOfAnimalsToMove = Random.nextInt(animalsInEnclosure.size)
             repeat(numberOfAnimalsToMove) {
-                val randomAnimal = animalsInEnclosure.random()
-                val moveResult = enclosure.moveAnimal(randomAnimal)
+                // Select a random index for the animal
+                val randomIndex = animalsInEnclosure.indices.random()
+                val randomAnimal = animalsInEnclosure[randomIndex]
+                // Call moveAnimal with the animal and its index
+                val moveResult = enclosure.moveAnimal(randomAnimal, randomIndex)
                 status.append(moveResult).append("\n")
             }
         }
@@ -202,12 +221,18 @@ class ZooImpl(
     override fun feedAnimalsInEnclosures() {
         val status = StringBuilder()
         for (enclosure in enclosures) {
-            for (animal in enclosure.animals) {
+            for (animalIndex in 0 until enclosure.animals.size) {
+                val animal = enclosure.animals[animalIndex]
                 if (animal.hungerLevel >= animal.getHungerLimit()) {
                     animal.eatFromEnclosure(enclosure)
-                    status.append("Animal ${animal.type} has been fed.\n")
+                    animal.hungerLevel = 0
+                    status.append("${animal.type} id:$animalIndex has been fed\n")
                 }
             }
+        }
+        val result = status.toString().trim()
+        if (result.isNotEmpty()) {
+            println(result)
         }
     }
 
@@ -227,4 +252,23 @@ class ZooImpl(
 
         return "Животное типа $species не найдено в открытой части вольера."
     }
+
+    override fun getRandomVisitor(): Visitor? {
+        if (visitors.isNotEmpty()) {
+            return visitors.random()
+        }
+        return null
+    }
+
+    override fun getRandomAnimal(): Animal {
+        return enclosures.random().animals.random()
+    }
+
+    override fun checkStatusOpenablePart() {
+        for (i in 0..<enclosures.size) {
+            println("$i:${enclosures[i].checkStatusOpenablePart()}")
+        }
+    }
+
+
 }

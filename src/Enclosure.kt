@@ -18,9 +18,10 @@ interface Enclosure {
     fun getOpenablePart(): List<Animal>
 
     fun getStatus() : String
+    fun checkStatusOpenablePart(): String
     fun isFull(): Boolean
 
-    fun moveAnimal(animal: Animal): String
+    fun moveAnimal(animal: Animal, animalId: Int): String
 }
 
 

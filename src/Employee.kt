@@ -1,7 +1,7 @@
 class Employee(name: String = "", gender: String = "", private var position: String = "") : People(name, gender) {
 
     private companion object {
-        const val FOODAMOUNT = 100
+        const val FOODAMOUNT = 25
     }
 
     fun getStatus(employee: Employee): String {
@@ -18,8 +18,8 @@ class Employee(name: String = "", gender: String = "", private var position: Str
         return "Должность сотрудника $name изменена на ${employeeToEdit.position}"
     }
 
-    fun fillStockFood(enclosure: Enclosure): String {
+    fun fillStockFood(enclosure: Enclosure) {
         enclosure.foodStock += FOODAMOUNT
-        return "${this.name} пополняет запас еды в вольере."
+        println("${this.name} пополняет запас еды в вольере.")
     }
 }

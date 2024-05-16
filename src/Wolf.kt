@@ -4,7 +4,7 @@ class Wolf : Animal("Wolf", 0) {
         const val WOLFVOICE = "Wolf: Уууууууу"
     }
 
-    override fun getHungerLimit(): Int = 70
+    override fun getHungerLimit(): Int = 30
 
     override fun makeSound() {
         println(WOLFVOICE)

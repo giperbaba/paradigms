@@ -29,7 +29,7 @@ abstract class Animal(val type: String = "", var hungerLevel: Int = 0) {
         val foodToEat = hungerLevel
         return if (enclosure.foodStock >= foodToEat) {
             enclosure.foodStock -= foodToEat
-            hungerLevel = 0
+            this.hungerLevel = 0
             "$type поел(а) из вольера"
         }
         else {
