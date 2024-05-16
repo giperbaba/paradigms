@@ -21,7 +21,7 @@ class ZooTimer(private val zoo: Zoo, private val timer: Timer = Timer()) {
 
                     tickCounter++
                     if (tickCounter >= moveInterval) {
-                        zoo.moveAnimals() // Перемещаем животных между открытой и закрытой частью
+                        zoo.moveAnimals() // Перемещаем рандомных животных между открытой и закрытой частью
                         tickCounter = 0
                     }
                 }
