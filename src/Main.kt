@@ -36,11 +36,11 @@ fun main() {
 
     val zooTimer = ZooTimer(zoo)
 
-    val vet = Employee("John", "Male", "Vet")
+    val vet = Employee("Johny", "Male", "Vet")
     val security = Employee("Alice", "Female", "Security")
     val cleaner = Employee("Bob", "Male", "Cleaner")
 
-    val visitor = Visitor("Yuri", "Male")
+    val visitor = Visitor("Lukas", "Male")
 
     zoo.addEmployee(vet)
     zoo.addEmployee(security)

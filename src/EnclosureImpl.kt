@@ -41,7 +41,6 @@ class EnclosureImpl() : Enclosure {
         animals.add(animal)
         animal.getZeroHungerLevel(animal)
 
-        // Рандомно выбираем, в какую часть вольера добавить животное
         val addToOpenPart = Random.nextBoolean()
         if (addToOpenPart) {
             openablePart.animalsOpenPart.add(animal)
@@ -63,14 +62,12 @@ class EnclosureImpl() : Enclosure {
     }
 
     override fun moveAnimal(animal: Animal, animalId: Int): String {
-        // Check if the animal is in the open part
         if (openablePart.animalsOpenPart.contains(animal)) {
             openablePart.animalsOpenPart.remove(animal)
             closeablePart.animalsClosePart.add(animal)
             return "${animal.type} id:$animalId перемещен(а) в закрытую часть вольера"
         }
 
-        // Check if the animal is in the closed part
         if (closeablePart.animalsClosePart.contains(animal)) {
             closeablePart.animalsClosePart.remove(animal)
             openablePart.animalsOpenPart.add(animal)
