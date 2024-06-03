@@ -1,4 +1,10 @@
-class Visitor(name: String = "", gender: String = "", private var cash: Int = 100) : People(name, gender) {
+import java.util.UUID
+
+class Visitor(
+    name: String = "",
+    gender: String = "",
+    private var cash: Int = 100,
+) : People(name, gender) {
 
     private val food: MutableList<SpecialFood> = mutableListOf()
 
@@ -23,21 +29,20 @@ class Visitor(name: String = "", gender: String = "", private var cash: Int = 10
 
     fun feedAnimal(animal: Animal) {
         if (animal.hungerLevel != 0) {
-            println("${animal.type}: не хочу нах" )
+            println("${animal.type}: не хочу нах")
             return
         }
         if (food.size == 0) {
-            val randomFoodType = FoodType.values().random()
+            val randomFoodType = listOf(animal.firstFoodType.type, animal.secondFoodType.type).random()
             val specialFood = SpecialFood(randomFoodType, 10)
             this.buySpecialFood(specialFood)
             food.add(specialFood)
-            animal.hungerLevel -= specialFood.price
+            animal.hungerLevel = 0
             food.remove(specialFood)
             println("${this.name} кормит ${animal.type} едой: ${specialFood.name}")
-        }
-        else {
+        } else {
             val foodForFeeding = food.random()
-            animal.hungerLevel -= foodForFeeding.price
+            animal.hungerLevel = 0
             food.remove(foodForFeeding)
             println("${this.name} кормит ${animal.type}")
         }

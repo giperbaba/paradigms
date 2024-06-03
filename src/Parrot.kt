@@ -1,4 +1,4 @@
-class Parrot : Animal("Parrot") {
+class Parrot : Animal("Parrot", 0, Apple(), Juice()) {
 
     private companion object {
         const val PARROT_VOICE = "Parrot: Привет, ж*па!"

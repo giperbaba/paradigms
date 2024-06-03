@@ -1,22 +1,27 @@
 import java.util.Locale
 import kotlin.random.Random
 
-class EnclosureImpl() : Enclosure {
+class EnclosureImpl : Enclosure, BaseEntity() {
 
     private companion object {
         const val LIMITWOLF = 5
         const val LIMITMONKEY = 7
         const val LIMITPARROT = 10
-        const val INITIALFOOD = 75
+        const val INITIALFOOD = 150
     }
 
     override val animals: MutableList<Animal> = mutableListOf()
-    override var foodStock: Int = INITIALFOOD
     override var limitSize: Int = -1
 
-
-    val openablePart : OpenablePart = OpenablePartImpl()
+    private val openablePart: OpenablePart = OpenablePartImpl()
     private val closeablePart: CloseablePart = CloseablePartImpl()
+
+    override var hashMap: MutableMap<String, Int> = mutableMapOf()
+
+    fun <T : Food, G : Food> addEnclosureFoodType(firstFoodType: T, secondFoodType: G) {
+        hashMap[firstFoodType.type.toString()] = INITIALFOOD
+        hashMap[secondFoodType.type.toString()] = INITIALFOOD
+    }
 
     override fun getOpenablePart(): List<Animal> {
         return openablePart.animalsOpenPart
@@ -78,10 +83,13 @@ class EnclosureImpl() : Enclosure {
     }
 
 
-    override fun getStatus() : String {
+    override fun getStatus(): String {
         val status = StringBuilder()
         status.append("Статус вольера:\n")
-        status.append("Запас еды: $foodStock\n")
+        status.append(
+            "Запас еды: ${animals[0].firstFoodType} - ${this.hashMap[animals[0].firstFoodType.type.toString()]}\n" +
+                    "${animals[0].secondFoodType} - ${this.hashMap[animals[0].secondFoodType.type.toString()]}"
+        )
         status.append("Животные:\n")
         animals.forEach { status.append("${it.type}\n") }
         return status.toString()
@@ -90,7 +98,7 @@ class EnclosureImpl() : Enclosure {
     override fun checkStatusOpenablePart(): String {
         val status = StringBuilder()
         status.append("Животные в открытой части:\n")
-        openablePart.animalsOpenPart.forEach { status.append("${it.type}\n") }
+        openablePart.animalsOpenPart.forEach { status.append(it.type) }
         return status.toString()
     }
 }

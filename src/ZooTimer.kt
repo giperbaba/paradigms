@@ -5,24 +5,27 @@ class ZooTimer(private val zoo: Zoo, private val timer: Timer = Timer()) {
     private var isPaused: Boolean = false
 
     private val moveInterval: Long = 10
+    private val feedByVisitorInterval = 5
     private var tickCounter: Long = 0
 
     fun start() {
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 if (!isPaused) {
-                    val randomVisitor = zoo.getRandomVisitor()
-                    val randomAnimal = zoo.getRandomAnimal()
-                    randomVisitor?.name?.let { zoo.feedAnimalsByVisitor(it, randomAnimal.type) }
 
                     zoo.increaseHungerLevel() // Увеличиваем уровень голода каждую секунду
                     zoo.fillStockEnclosure() // Проверяем запас еды
                     zoo.feedAnimalsInEnclosures() // Голодные животные кушают
 
                     tickCounter++
-                    if (tickCounter >= moveInterval) {
+                    if (tickCounter % moveInterval == 0L) {
                         zoo.moveAnimals() // Перемещаем рандомных животных между открытой и закрытой частью
-                        tickCounter = 0
+                    }
+
+                    if (tickCounter % feedByVisitorInterval == 0L) {
+                        val randomVisitor = zoo.getRandomVisitor()
+                        val randomAnimal = zoo.getRandomAnimal()
+                        randomVisitor?.name?.let { zoo.feedAnimalsByVisitor(it, randomAnimal.type) }
                     }
                 }
             }

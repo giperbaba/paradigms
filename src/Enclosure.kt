@@ -10,7 +10,7 @@ interface Enclosure {
 
     val animals: MutableList<Animal>
     val limitSize: Int
-    var foodStock: Int
+    var hashMap: MutableMap<String, Int>
 
     fun append(animal: Animal): String
     fun remove(species: String): String

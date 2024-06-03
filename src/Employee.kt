@@ -1,7 +1,13 @@
-class Employee(name: String = "", gender: String = "", private var position: String = "") : People(name, gender) {
+import java.util.UUID
+
+class Employee(
+    name: String = "",
+    gender: String = "",
+    private var position: String = "",
+) : People(name, gender) {
 
     private companion object {
-        const val FOODAMOUNT = 25
+        const val FOODAMOUNT = 100
     }
 
     fun getStatus(employee: Employee): String {
@@ -18,8 +24,8 @@ class Employee(name: String = "", gender: String = "", private var position: Str
         return "Должность сотрудника $name изменена на ${employeeToEdit.position}"
     }
 
-    fun fillStockFood(enclosure: Enclosure) {
-        enclosure.foodStock += FOODAMOUNT
+    fun fillStockFood(enclosure: Enclosure, food: Food) {
+        enclosure.hashMap[food.type.toString()] = enclosure.hashMap[food.type.toString()]!! + FOODAMOUNT
         println("${this.name} пополняет запас еды в вольере.")
     }
 }
