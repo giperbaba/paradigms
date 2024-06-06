@@ -6,10 +6,6 @@ class Employee(
     private var position: String = "",
 ) : People(name, gender) {
 
-    private companion object {
-        const val FOODAMOUNT = 100
-    }
-
     fun getStatus(employee: Employee): String {
         return "Имя: ${employee.name}, Пол: ${employee.gender}, Должность: ${employee.position}"
     }
@@ -25,7 +21,9 @@ class Employee(
     }
 
     fun fillStockFood(enclosure: Enclosure, food: Food) {
-        enclosure.hashMap[food.type.toString()] = enclosure.hashMap[food.type.toString()]!! + FOODAMOUNT
-        println("${this.name} пополняет запас еды в вольере.")
+        val currentStock = enclosure.hashMap[food.type] ?: 0
+        println("Текущий запас ${food.type}: $currentStock")
+        enclosure.hashMap[food.type] = currentStock + enclosure.animals.size
+        println("${this.name} пополняет запас ${food.type} в вольере. Новый запас: ${enclosure.hashMap[food.type]}")
     }
 }

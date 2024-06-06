@@ -1,3 +1,4 @@
+import java.lang.Integer.max
 import java.util.Locale
 import kotlin.random.Random
 
@@ -5,9 +6,9 @@ class EnclosureImpl : Enclosure, BaseEntity() {
 
     private companion object {
         const val LIMITWOLF = 5
-        const val LIMITMONKEY = 7
-        const val LIMITPARROT = 10
-        const val INITIALFOOD = 150
+        const val LIMITMONKEY = 4
+        const val LIMITPARROT = 7
+        const val INITIALFOOD = 5
     }
 
     override val animals: MutableList<Animal> = mutableListOf()
@@ -16,11 +17,11 @@ class EnclosureImpl : Enclosure, BaseEntity() {
     private val openablePart: OpenablePart = OpenablePartImpl()
     private val closeablePart: CloseablePart = CloseablePartImpl()
 
-    override var hashMap: MutableMap<String, Int> = mutableMapOf()
+    override var hashMap: MutableMap<FoodType, Int> = mutableMapOf()
 
     fun <T : Food, G : Food> addEnclosureFoodType(firstFoodType: T, secondFoodType: G) {
-        hashMap[firstFoodType.type.toString()] = INITIALFOOD
-        hashMap[secondFoodType.type.toString()] = INITIALFOOD
+        hashMap[firstFoodType.type] = INITIALFOOD
+        hashMap[secondFoodType.type] = INITIALFOOD
     }
 
     override fun getOpenablePart(): List<Animal> {
@@ -82,13 +83,12 @@ class EnclosureImpl : Enclosure, BaseEntity() {
         return "${animal.type} id:$animalId не найдено в вольере"
     }
 
-
     override fun getStatus(): String {
         val status = StringBuilder()
         status.append("Статус вольера:\n")
         status.append(
-            "Запас еды: ${animals[0].firstFoodType} - ${this.hashMap[animals[0].firstFoodType.type.toString()]}\n" +
-                    "${animals[0].secondFoodType} - ${this.hashMap[animals[0].secondFoodType.type.toString()]}"
+            "Запас еды: ${animals[0].firstFoodType} - ${this.hashMap[animals[0].firstFoodType.type]}\n" +
+                    "${animals[0].secondFoodType} - ${this.hashMap[animals[0].secondFoodType.type]}"
         )
         status.append("Животные:\n")
         animals.forEach { status.append("${it.type}\n") }

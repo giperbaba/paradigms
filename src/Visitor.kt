@@ -1,5 +1,3 @@
-import java.util.UUID
-
 class Visitor(
     name: String = "",
     gender: String = "",
@@ -17,7 +15,7 @@ class Visitor(
         return "Имя посетителя изменено с $oldName на $newName"
     }
 
-    fun buySpecialFood(specialFood: SpecialFood): String {
+    private fun buySpecialFood(specialFood: SpecialFood): String {
         return if (cash >= specialFood.price) {
             cash -= specialFood.price
             food.add(specialFood)
@@ -28,21 +26,22 @@ class Visitor(
     }
 
     fun feedAnimal(animal: Animal) {
-        if (animal.hungerLevel != 0) {
+        if (animal.hungerLevel < animal.getHungerLimit()) {
             println("${animal.type}: не хочу нах")
             return
         }
         if (food.size == 0) {
-            val randomFoodType = listOf(animal.firstFoodType.type, animal.secondFoodType.type).random()
-            val specialFood = SpecialFood(randomFoodType, 10)
+            val randomFoodType = listOf(animal.firstFoodType, animal.secondFoodType).random()
+            val specialFood = SpecialFood(randomFoodType.type, 10, randomFoodType.capacity)
             this.buySpecialFood(specialFood)
             food.add(specialFood)
-            animal.hungerLevel = 0
+            animal.hungerLevel -= specialFood.capacity
             food.remove(specialFood)
             println("${this.name} кормит ${animal.type} едой: ${specialFood.name}")
-        } else {
+        }
+        else {
             val foodForFeeding = food.random()
-            animal.hungerLevel = 0
+            animal.hungerLevel -= foodForFeeding.capacity
             food.remove(foodForFeeding)
             println("${this.name} кормит ${animal.type}")
         }

@@ -8,16 +8,6 @@ abstract class Animal(
     override val id: UUID = UUID.randomUUID()
 ) : BaseEntity() {
 
-
-    private companion object {
-        const val HUNGRY = "Голоден"
-        const val FULL = "Сыт"
-    }
-
-    fun getHungerStatus(): String {
-        return if (hungerLevel >= getHungerLimit()) HUNGRY else FULL
-    }
-
     fun getZeroHungerLevel(animal: Animal) {
         animal.hungerLevel = 0
     }
@@ -35,24 +25,32 @@ abstract class Animal(
     abstract fun makeSound()
 
     fun eatFromEnclosure(enclosure: Enclosure) {
-        val foodToEat = hungerLevel
-        val firstFoodAvailable = enclosure.hashMap[this.firstFoodType.type.toString()] ?: 0
-        val secondFoodAvailable = enclosure.hashMap[this.secondFoodType.type.toString()] ?: 0
+        val firstFoodAvailable = enclosure.hashMap[this.firstFoodType.type] ?: 0
+        val secondFoodAvailable = enclosure.hashMap[this.secondFoodType.type] ?: 0
 
-        if (firstFoodAvailable >= foodToEat && secondFoodAvailable >= foodToEat) {
+        if (firstFoodAvailable > 0 && secondFoodAvailable > 0) {
             val randomFoodType = listOf(firstFoodType, secondFoodType).random()
-            enclosure.hashMap[randomFoodType.type.toString()] = (enclosure.hashMap[randomFoodType.type.toString()] ?: 0) - foodToEat
-            this.hungerLevel = 0
+            enclosure.hashMap[randomFoodType.type] = enclosure.hashMap[randomFoodType.type]!! - 1
+            this.hungerLevel -= randomFoodType.capacity
+            if (this.hungerLevel < 0) {
+                this.hungerLevel = 0
+            }
             println("$type поел(а) ${randomFoodType.type} из вольера")
         }
-        else if (firstFoodAvailable >= foodToEat) {
-            enclosure.hashMap[firstFoodType.type.toString()] = firstFoodAvailable - foodToEat
-            this.hungerLevel = 0
+        else if (firstFoodAvailable > 0) {
+            enclosure.hashMap[firstFoodType.type] = firstFoodAvailable - 1
+            this.hungerLevel -= firstFoodType.capacity
+            if (this.hungerLevel < 0) {
+                this.hungerLevel = 0
+            }
             println("$type поел(а) ${firstFoodType.type} из вольера")
         }
-        else if (secondFoodAvailable >= foodToEat) {
-            enclosure.hashMap[secondFoodType.type.toString()] = secondFoodAvailable - foodToEat
-            this.hungerLevel = 0
+        else if (secondFoodAvailable > 0) {
+            enclosure.hashMap[secondFoodType.type] = secondFoodAvailable - 1
+            this.hungerLevel -= secondFoodType.capacity
+            if (this.hungerLevel < 0) {
+                this.hungerLevel = 0
+            }
             println("$type поел(а) ${secondFoodType.type} из вольера")
         }
         else {

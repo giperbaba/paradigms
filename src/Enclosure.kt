@@ -7,10 +7,9 @@ interface CloseablePart {
 }
 
 interface Enclosure {
-
     val animals: MutableList<Animal>
     val limitSize: Int
-    var hashMap: MutableMap<String, Int>
+    var hashMap: MutableMap<FoodType, Int>
 
     fun append(animal: Animal): String
     fun remove(species: String): String

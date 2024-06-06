@@ -183,12 +183,12 @@ class ZooImpl<T : BaseEntity> : Zoo {
         val status = StringBuilder()
 
         for (enclosure in enclosures) {
-            if (enclosure.hashMap[enclosure.animals[0].firstFoodType.type.toString()]!! <= 0) {
+            if (enclosure.hashMap[enclosure.animals[0].firstFoodType.type]!! <= 0) {
                 val randomEmployee = employees.random()
                 val fillStockMessage = randomEmployee.fillStockFood(enclosure, enclosure.animals[0].firstFoodType)
                 status.append(fillStockMessage)
             }
-            if (enclosure.hashMap[enclosure.animals[0].secondFoodType.type.toString()]!! <= 0) {
+            if (enclosure.hashMap[enclosure.animals[0].secondFoodType.type]!! <= 0) {
                 val randomEmployee = employees.random()
                 val fillStockMessage = randomEmployee.fillStockFood(enclosure, enclosure.animals[0].secondFoodType)
                 status.append(fillStockMessage)

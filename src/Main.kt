@@ -4,6 +4,19 @@ import java.util.Locale
 fun main() {
     val zoo = ZooImpl<BaseEntity>()
 
+    val zooTimer = ZooTimer(zoo)
+
+    val vet = Employee("Johny", "Male", "Vet")
+    val security = Employee("Alice", "Female", "Security")
+    val cleaner = Employee("Bob", "Male", "Cleaner")
+
+    val visitor = Visitor("Lukas", "Male")
+
+    zoo.addNewEntity(vet)
+    zoo.addNewEntity(security)
+    zoo.addNewEntity(cleaner)
+    zoo.addNewEntity(visitor)
+
     println("\nДля выполнения операций введите команды:")
 
     println("1 - добавить сущность")
@@ -26,19 +39,6 @@ fun main() {
     println("14 oldName newName - редактировать имя сотрудника")
     println("15 name newPosition - редактировать должность сотрудника")
     println("16 oldName newName - редактировать имя посетителя")
-
-    val zooTimer = ZooTimer(zoo)
-
-    val vet = Employee("Johny", "Male", "Vet")
-    val security = Employee("Alice", "Female", "Security")
-    val cleaner = Employee("Bob", "Male", "Cleaner")
-
-    val visitor = Visitor("Lukas", "Male")
-
-    zoo.addNewEntity(vet)
-    zoo.addNewEntity(security)
-    zoo.addNewEntity(cleaner)
-    zoo.addNewEntity(visitor)
 
     zooTimer.start()
     val scanner = Scanner(System.`in`)
